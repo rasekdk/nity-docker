@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  api: 
+    container_name: api-container
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    volumes:
+      - ./server/:/server
+      - /server/node_modules
+    environment:
+      - NODE_ENV=development
+      - DEBUG=express:*
+      - PORT=8080
+  mongo: 
+    container_name: mongo-db
+    image: mongo
+    expose: 
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./apiDB:/data/db
+
+volumes:
+  apiDB:
